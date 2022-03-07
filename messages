@@ -1,7 +1,7 @@
 local messages = {
-	"Script is not done yet at the moment, I just added this command for testing purposes. ^^",
-	"LOL! I don't know why you executed this command..",
-	"I hope you're having a great day.",
-	"This script is made by kyo,#0069",
-	"Money grows on trees. If you think not, you're weird."
+	"Script is not done yet at the moment, I just added this command for testing purposes. ^^";
+	"LOL! I don't know why you executed this command..";
+	"I hope you're having a great day.";
+	"This script is made by kyo,#0069";
+	"Money grows on trees. If you think not, you're weird.;
 }
