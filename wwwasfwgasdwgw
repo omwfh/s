@@ -1,0 +1,68 @@
+local light = game.Lighting
+for i,v in pairs(light:GetChildren()) do
+	print(v.Name)
+	v:Destroy()
+end
+
+wait(0.2)
+local terrain = game.Workspace.Terrain
+local color = Instance.new("ColorCorrectionEffect")
+local blur  = Instance.new("BlurEffect")
+local bloom = Instance.new("BloomEffect")
+local sun   = Instance.new("SunRaysEffect")
+
+color.Parent = light
+blur.Parent  = light
+bloom.Parent = light
+sun.Parent   = light
+
+color.Enabled = false
+color.Brightness = 0
+color.Contrast = 0
+color.Saturation = 0
+color.TintColor = Color3.fromRGB(198, 84, 255)
+
+bloom.Enabled = false
+bloom.Intensity = 1
+bloom.Size = 56
+bloom.Threshold = 0.8
+
+blur.Enabled = false
+blur.Size = math.random(3,3.5)
+
+sun.Enabled = false
+sun.Intensity = 1
+sun.Spread = 1
+
+if config.CC then
+	color.Enabled = true
+end
+
+if config.Bloom then
+	color.Enabled = true
+end
+
+if config.Blur then
+	color.Enabled = true
+end
+
+if config.SunRays then
+	color.Enabled = true
+end
+
+if config.Terrain then
+	terrain.WaterColor = Color3.fromRGB(98, 173, 168)
+	terrain.WaterReflectance = 1
+	terrain.WaterTransparency = 0.45
+	terrain.WaterWaveSize = 0.15
+	terrain.WaterWaveSpeed = 10
+end
+
+if config.Lighting then
+	light.Ambient = Color3.fromRGB(94, 28, 175)
+	light.Brightness = 1
+	light.ExposureCompensation = 0
+	light.GlobalShadows = true
+	light.OutdoorAmbient = Color3.fromRGB(70, 25, 103)
+	light.Outlines = false
+end
