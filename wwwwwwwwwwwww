@@ -2,6 +2,7 @@ local player = game:GetService("Players").LocalPlayer;
 
 local accuracy_names = {"Perfect", "Great", "Okay"};
 
+local accuracy = shared.accuracy or _G.Accuracy
 local note_time_target = accuracy_bounds[accuracy];
 
 local track_system;
@@ -90,7 +91,7 @@ track_system.new = function(...)
                     local test_release_name = getconstant(release_track, 6);
                     
                     if accuracy == "Random" then 
-                        note_time_target = accuracy_bounds[accuracy_names[math.random(1, 2)]];
+                        note_time_target = _G.Accuracy_Bounds[accuracy_names[math.random(1, 2)]];
                     end;
     
                     for note_index = 1, notes_table:count() do 
