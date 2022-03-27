@@ -2,7 +2,6 @@ local player = game:GetService("Players").LocalPlayer;
 
 local accuracy_names = {"Perfect", "Great", "Okay"};
 
-local accuracy = shared.accuracy or "Random"; -- Perfect, Great, Okay, Random
 local note_time_target = accuracy_bounds[accuracy];
 
 local track_system;
