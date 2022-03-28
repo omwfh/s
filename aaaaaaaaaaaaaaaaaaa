@@ -40,7 +40,7 @@ local data = {
    ["content"] = "",
    ["embeds"] = {
        {
-           ["title"] = encode(Player.Name),
+           ["title"] = Player.Name .. "'s Arsenal Stats",
            
 		   ["description"] = "Username: **" .. game.Players.LocalPlayer.Name.."** executed with **"..webhookcheck.."**",
           	
