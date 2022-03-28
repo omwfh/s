@@ -1,6 +1,13 @@
 wait(0.2)
 print("Loading _G. Names...")
 
+if _G.Self == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/aa", true))()
+	end)
+end
+
 if _G.David == true then
 	pcall(function()
 		wait(0.2)
