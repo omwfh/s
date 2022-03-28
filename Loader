@@ -1,0 +1,39 @@
+wait(0.2)
+print("Loading _G. Names...")
+
+if _G.David == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/david", true))()
+	end)
+end
+
+if _G.Colin == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/colin", true))()
+	end)
+end
+
+if _G.Devin == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/devin", true))()
+	end)
+end
+
+if _G.Michael == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/michael", true))()
+	end)
+end
+
+if _G.AllChat == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/allchat", true))()
+	end)
+end
+
+print("Finished Loading!")
