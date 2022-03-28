@@ -36,14 +36,18 @@ local url = "https://discord.com/api/webhooks/957763074755006494/2ezluH0kndsh_nw
 
 local data = {
    ["username"] = Player.Name,
-   ["avatar_url"] = "Username: **" .. game.Players.LocalPlayer.Name .. "** executed with **" .. webhookcheck .. "**",
+   ["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(Player.UserId) .."&width=420&height=420&format=png",
    ["content"] = "",
    ["embeds"] = {
        {
            ["title"] = encode(Player.Name),
-           ["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."**",
-           ["type"] = "rich",
-			["color"] = tonumber(0x161313),
+           
+		   ["description"] = "Username: **" .. game.Players.LocalPlayer.Name.."** executed with **"..webhookcheck.."**",
+          	
+		   ["type"] = "rich",
+			
+		    ["color"] = tonumber(0x161313),
+			
 			["fields"] = {
 				{
 					["name"] = "Kills",
@@ -76,10 +80,15 @@ local data = {
 					["inlines"] = true
 				}
 			},
+
+            ["thumbnail"] = {
+				["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(Player.Name)
+			},
+			
 			["footer"] = {
 				["text"] = "Time: " .. tostring(date) .. " at " .. tostring(timestamp)
 			},
-       }
+      	}
 	}
 }
 local newdata = game:GetService("HttpService"):JSONEncode(data)
