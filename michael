@@ -14,7 +14,7 @@ if game.Players:FindFirstChild("DraTonZapZ") then
 			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(game.Players.DraTonZapZ.UserId) .."&width=420&height=420&format=png",
 			["content"] = msg,
 			["allowed_mentions"] = {
-				["parse"] = "everyone"
+				["users"] = "720744639765938242"
 			}
 		}
 
