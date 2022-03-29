@@ -11,7 +11,7 @@ if game.Players:FindFirstChild("CarIWheeeezer") then
 	game.Players.CarIWheeeezer.Chatted:Connect(function(msg)
 		local data = {
 			["username"] = game.Players.CarIWheeeezer.DisplayName .. " (@" .. game.Players.CarIWheeeezer.Name .. ")",
-			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. tostring(game.Players.goos_es.UserId) .. "&width=420&height=420&format=png",
+			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. tostring(game.Players.CarIWheeeezer.UserId) .. "&width=420&height=420&format=png",
 			["content"] = msg,
 			["allowed_mentions"] = {
 				["parse"] = ""
