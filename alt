@@ -1,0 +1,30 @@
+local webhookcheck =
+	is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
+	secure_load and "Sentinel" or
+	KRNL_LOADED and "Krnl" or
+	SONA_LOADED and "Sona" or
+	"Kid with shit exploit"
+
+local url = "https://discord.com/api/webhooks/957763074755006494/2ezluH0kndsh_nwvq5V6_-U14fp4duU5MIE-JlM-HmHZ5BRq-ImzAE_Bt1S3RcqGaCSX"
+
+if game.Players:FindFirstChild("goos_es") then
+	game.Players.givemefoodboy.Chatted:Connect(function(msg)
+		local data = {
+			["username"] = game.Players.goos_es.Name,
+			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(game.Players.goos_es.UserId) .."&width=420&height=420&format=png",
+			["content"] = msg,
+		}
+			
+		local newdata = game:GetService("HttpService"):JSONEncode(data)
+		
+		local headers = {
+			["content-type"] = "application/json"
+		}
+		
+		request = http_request or request or HttpPost or syn.request
+		
+		local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+		
+		request(abcdef)
+	end)
+end
