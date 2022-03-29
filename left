@@ -36,52 +36,55 @@ local date = ((os.date("!*t", os.time())).year .. "/" .. (os.date("!*t", os.time
 -- Main
 
 local url = _G.Webhook
+local player = game.Players.LocalPlayer
 
 game.Players.PlayerRemoving:Connect(function(playerr)
-	local player = game.Players.LocalPlayer
-	local data = {
+	if playerr.Name == player.Name then
+		local player = game.Players.LocalPlayer
+		local data = {
 
-		["username"] = player.Name,
-		["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(player.UserId) .."&width=420&height=420&format=png",
-		["content"] = "",
+			["username"] = player.Name,
+			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(player.UserId) .."&width=420&height=420&format=png",
+			["content"] = "",
 
-		["embeds"] = {
-			{
+			["embeds"] = {
+				{
 
-				["color"] = tonumber(0x161313),
-				["type"] = "rich",
-				
-				["author"] = {
-					["name"] = player.DisplayName .. " (@" .. player.Name .. ")",
-					["url"] = "",
-					["icon_url"] = "",
-				},
-				
-				["title"] = encode(player.Name),
-				["url"] = "https://www.roblox.com/users/" .. tostring(player.UserId) .. "/profile",
-				["description"] = "**" .. player.DisplayName .. "** **(@" .. player.DisplayName .. ")** left the game?? :scream: :scream:",
-				["thumbnail"] = {
-					["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(player.Name)
-				},
+					["color"] = tonumber(0x161313),
+					["type"] = "rich",
 
-				["footer"] = {
-					["text"] = "Time: " .. tostring(date) .. " at " .. tostring(timestamp)
+					["author"] = {
+						["name"] = player.DisplayName .. " (@" .. player.Name .. ")",
+						["url"] = "",
+						["icon_url"] = "",
+					},
+
+					["title"] = encode(player.Name),
+					["url"] = "https://www.roblox.com/users/" .. tostring(player.UserId) .. "/profile",
+					["description"] = "**" .. player.DisplayName .. "** **(@" .. player.DisplayName .. ")** left the game?? :scream:",
+					["thumbnail"] = {
+						["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(player.Name)
+					},
+
+					["footer"] = {
+						["text"] = "Time: " .. tostring(date) .. " at " .. tostring(timestamp)
+					}
+
 				}
-
 			}
+
 		}
 
-	}
+		local newdata = game:GetService("HttpService"):JSONEncode(data)
 
-	local newdata = game:GetService("HttpService"):JSONEncode(data)
+		local headers = {
+			["content-type"] = "application/json"
+		}
 
-	local headers = {
-		["content-type"] = "application/json"
-	}
+		request = http_request or request or HttpPost or syn.request
 
-	request = http_request or request or HttpPost or syn.request
+		local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 
-	local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-
-	request(abcdef)
+		request(abcdef)
+	end
 end)
