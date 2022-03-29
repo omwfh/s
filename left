@@ -62,6 +62,17 @@ game.Players.PlayerRemoving:Connect(function(playerr)
 					["title"] = encode(player.Name),
 					["url"] = "https://www.roblox.com/users/" .. tostring(player.UserId) .. "/profile",
 					["description"] = "**" .. player.DisplayName .. "** **(@" .. player.DisplayName .. ")** left the game?? :scream:",
+					
+					["embeds"] = {
+						["fields"] = {
+							{
+								["name"] = "Game",
+								["value"] = "[" .. tostring(GetName) .. "](" .. "https://www.roblox.com/games/" .. tostring(game.PlaceId) .. "/" .. ")",
+								["inline"] = false
+							}
+						}
+					},
+					
 					["thumbnail"] = {
 						["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(player.Name)
 					},
