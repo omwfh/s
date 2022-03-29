@@ -15,6 +15,13 @@ if _G.David == true then
 	end)
 end
 
+if _G.Chris == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/chris", true))()
+	end)
+end
+
 if _G.Colin == true then
 	pcall(function()
 		wait(0.2)
