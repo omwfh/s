@@ -22,7 +22,7 @@ if _G.Colin == true then
 	end)
 end
 
-if _G.Colins_ALT == true then
+if _G.Goose == true then
 	pcall(function()
 		wait(0.2)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/alt", true))()
