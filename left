@@ -37,7 +37,7 @@ local date = ((os.date("!*t", os.time())).year .. "/" .. (os.date("!*t", os.time
 
 local url = _G.Webhook
 
-game.Players.PlayerRemoving:Connect(function(player)
+game.Players.PlayerRemoving:Connect(function(playerr)
 	local player = game.Players.LocalPlayer
 	local data = {
 
@@ -59,7 +59,7 @@ game.Players.PlayerRemoving:Connect(function(player)
 				
 				["title"] = encode(player.Name),
 				["url"] = "https://www.roblox.com/users/" .. tostring(player.UserId) .. "/profile",
-				["description"] = "**" .. player.DisplayName .. "** (@" .. player.DisplayName .. ")** left the game?? :scream: :scream:",
+				["description"] = "**" .. player.DisplayName .. "** **(@" .. player.DisplayName .. ")** left the game?? :scream: :scream:",
 				["thumbnail"] = {
 					["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(player.Name)
 				},
