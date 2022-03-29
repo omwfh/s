@@ -1,33 +1,30 @@
 local webhookcheck =
-	is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
-	secure_load and "Sentinel" or
-	KRNL_LOADED and "Krnl" or
-	SONA_LOADED and "Sona" or
-	"Kid with shit exploit"
+    is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
+    secure_load and "Sentinel" or
+    KRNL_LOADED and "Krnl" or
+    SONA_LOADED and "Sona" or
+    "Kid with shit exploit"
 
 local url = _G.Webhook
 
 if game.Players:FindFirstChild("DraTonZapZ") then
-	game.Players.DraTonZapZ.Chatted:Connect(function(msg)
-		local data = {
-			["username"] = game.Players.DraTonZapZ.DisplayName .. "(@" .. game.Players.DraTonZapZ.Name .. ")",
-			["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(game.Players.DraTonZapZ.UserId) .."&width=420&height=420&format=png",
-			["content"] = msg,
-			["allowed_mentions"] = {
-				["users"] = "720744639765938242"
-			}
-		}
-
-		local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-		local headers = {
-			["content-type"] = "application/json"
-		}
-
-		request = http_request or request or HttpPost or syn.request
-
-		local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-
-		request(abcdef)
-	end)
+    game.Players.DraTonZapZ.Chatted:Connect(function(msg)
+        local data = {
+            ["username"] = game.Players.DraTonZapZ.Name,
+            ["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(game.Players.DraTonZapZ.UserId) .."&width=420&height=420&format=png",
+            ["content"] = msg,
+        }
+            
+        local newdata = game:GetService("HttpService"):JSONEncode(data)
+        
+        local headers = {
+            ["content-type"] = "application/json"
+        }
+        
+        request = http_request or request or HttpPost or syn.request
+        
+        local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+        
+        request(abcdef)
+    end)
 end
