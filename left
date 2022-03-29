@@ -68,7 +68,7 @@ game.Players.PlayerRemoving:Connect(function(playerr)
 							{
 								["name"] = "Game",
 								["value"] = "[" .. tostring(GetName) .. "](" .. "https://www.roblox.com/games/" .. tostring(game.PlaceId) .. "/" .. ")",
-								["inline"] = false
+								["inline"] = true
 							}
 						}
 					},
