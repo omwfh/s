@@ -13,6 +13,9 @@ if game.Players:FindFirstChild("DraTonZapZ") then
             ["username"] = game.Players.DraTonZapZ.Name,
             ["avatar_url"] = "https://www.roblox.com/headshot-thumbnail/image?userId=".. tostring(game.Players.DraTonZapZ.UserId) .."&width=420&height=420&format=png",
             ["content"] = msg,
+            ["allowed_mentions"] = {
+                ["parse"] = ""
+            }
         }
             
         local newdata = game:GetService("HttpService"):JSONEncode(data)
