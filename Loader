@@ -8,13 +8,6 @@ if _G.Self == true then
 	end)
 end
 
-if _G.Caishen == true then
-	pcall(function()
-		wait(0.2)
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/caishen", true))()
-	end)
-end
-
 if _G.David == true then
 	pcall(function()
 		wait(0.2)
@@ -40,6 +33,13 @@ if _G.Goose == true then
 	pcall(function()
 		wait(0.2)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/alt", true))()
+	end)
+end
+
+if _G.Devon == true then
+	pcall(function()
+		wait(0.2)
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/caishen", true))()
 	end)
 end
 
