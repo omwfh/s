@@ -36,7 +36,7 @@ local date = ((os.date("!*t", os.time())).year .. "/" .. (os.date("!*t", os.time
 -- Main
 
 local url = _G.Webhook
-local player = game.Players.LocalPlayer
+local player = game.Players:FindFirstChild("SirTristAlot")
 
 game.Players.PlayerRemoving:Connect(function(playerr)
 	if playerr.Name == player.Name then
