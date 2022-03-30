@@ -57,6 +57,8 @@ if _G.Michael == true then
 	end)
 end
 
+wait(1)
+
 if _G.SL == true then
 	pcall(function()
 		wait(0.2)
