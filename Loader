@@ -64,6 +64,34 @@ if _G.SL == true then
 	end)
 end
 
+if _G.ML == true then
+    pcall(function()
+        wait(0.2)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/leftmichael", true))()
+    end)
+end
+
+if _G.DL == true then
+    pcall(function()
+        wait(0.2)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/davidleft", true))()
+    end)
+end
+
+if _G.DEVL == true then
+    pcall(function()
+        wait(0.2)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/devinleft", true))()
+    end)
+end
+
+if _G.CL == true then
+    pcall(function()
+        wait(0.2)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/colinleft", true))()
+    end)
+end
+
 if _G.AllChat == true then
 	pcall(function()
 		wait(0.2)
