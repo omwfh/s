@@ -351,11 +351,14 @@ Result_Artist.TextSize = 14.000
 Result_Artist.TextXAlignment = Enum.TextXAlignment.Left
 
 Result_Clicked.Name = "Result_Clicked"
+Result_Clicked.Position = UDim2.new(0, 0, 0, 0)
 Result_Clicked.Parent = ExampleResult
 Result_Clicked.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Result_Clicked.BackgroundTransparency = 1.000
 Result_Clicked.BorderSizePixel = 0
+Result_Clicked.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 Result_Clicked.Size = UDim2.new(0, 447, 0, 45)
+Result_Clicked.ImageTransparency = 1.000
 
 Result_Title.Name = "Result_Title"
 Result_Title.Parent = ExampleResult
@@ -371,7 +374,7 @@ Result_Title.TextSize = 14.000
 Result_Title.TextXAlignment = Enum.TextXAlignment.Left
 Result_Title.TextYAlignment = Enum.TextYAlignment.Bottom
 
-UIGridLayout.Parent = Results
+UIGridLayout.Parent = ScrollingFrame
 UIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIGridLayout.CellPadding = UDim2.new(0, 5, 0, 10)
 UIGridLayout.CellSize = UDim2.new(0, 447, 0, 45)
@@ -518,7 +521,7 @@ Title.TextTruncate = 1
 
 ExampleResult.Visible = false
 
-uis.InputBegan:Connect(function(input, wido)
+uis.InputBegan:Connect(function(input)
 	if (input.KeyCode == Enum.KeyCode.X) then
 		if (Main.Visible == true) then
 			Main.Visible = false
