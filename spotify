@@ -518,104 +518,94 @@ Title.TextTruncate = 1
 
 ExampleResult.Visible = false
 
-uis.InputBegan:Connect(
-	function(input, wido)
-		if (input.KeyCode == Enum.KeyCode.P) then
-			if (Main.Visible == true) then
-				Main.Visible = false
-				
-				if (CurrentAlbumCover.Visible == true) then
-					CurrentAlbumCover.Visible = false
-				end
-			elseif (Main.Visible == false) then
-				Main.Visible = true
-				
-				if (CurrentAlbumCover.Visible == false) then
-					CurrentAlbumCover.Visible = true
-				end
+uis.InputBegan:Connect(function(input, wido)
+	if (input.KeyCode == Enum.KeyCode.X) then
+		if (Main.Visible == true) then
+			Main.Visible = false
+
+			if (CurrentAlbumCover.Visible == true) then
+				CurrentAlbumCover.Visible = false
+			end
+		elseif (Main.Visible == false) then
+			Main.Visible = true
+
+			if (CurrentAlbumCover.Visible == false) then
+				CurrentAlbumCover.Visible = true
 			end
 		end
 	end
-)
+end)
 
-Next.MouseButton1Down:Connect(
-	function()
-		syn.request(requests["NextSong"])
+Next.MouseButton1Down:Connect(function()
+	syn.request(requests["NextSong"])
+end)
+
+Previous.MouseButton1Down:Connect(function()
+	syn.request(requests["LastSong"])
+end)
+
+SearchBox.TextBox.FocusLost:Connect(function(enterPressed, bruh)
+	if (not enterPressed) then
+		return
 	end
-)
 
-Previous.MouseButton1Down:Connect(
-	function()
-		syn.request(requests["LastSong"])
-	end
-)
-
-SearchBox.TextBox.FocusLost:Connect(
-	function(enterPressed, bruh)
-		if (not enterPressed) then
-			return
+	for _, v in next, Search.ScrollingFrame:GetChildren() do
+		if (not v:IsA("Frame") or v.Name == "ExampleResult") then
+			continue
 		end
 
-		for _, v in next, Search.ScrollingFrame:GetChildren() do
-			if (not v:IsA("Frame") or v.Name == "ExampleResult") then
+		v:Destroy()
+	end
+
+	local songs = searchSongs(SearchBox.TextBox.Text, 20)
+	if (songs.error) then
+		notify("Oh no! An error occurred!", songs.error.message, 2)
+		return
+	end
+
+	for i, v in next, songs.tracks.items do
+		local artists = v.artists
+		local artistString = artists[1].name
+
+		for i, v in next, artists do
+			if (v.name == artists[1].name) then
 				continue
 			end
 
-			v:Destroy()
+			artistString = artistString .. ", " .. v.name
 		end
 
-		local songs = searchSongs(SearchBox.TextBox.Text, 20)
-		if (songs.error) then
-			notify("Oh no! An error occurred!", songs.error.message, 2)
-			return
-		end
+		local newItem = ExampleResult:Clone()
+		newItem.Parent = SearchBox.ScrollingFrame
+		newItem.Name = v.name
+		newItem.Visible = true
+		newItem.Result_Artist.Text = artistString
+		newItem.Result_Title.Text = v.name
+		newItem.Result_Uri.Value = v.uri
 
-		for i, v in next, songs.tracks.items do
-			local artists = v.artists
-			local artistString = artists[1].name
-
-			for i, v in next, artists do
-				if (v.name == artists[1].name) then
-					continue
-				end
-
-				artistString = artistString .. ", " .. v.name
-			end
-
-			local newItem = ExampleResult:Clone()
-			newItem.Parent = SearchBox.ScrollingFrame
-			newItem.Name = v.name
-			newItem.Visible = true
-			newItem.Result_Artist.Text = artistString
-			newItem.Result_Title.Text = v.name
-			newItem.Result_Uri.Value = v.uri
-
-			newItem.Result_Clicked.MouseButton1Click:Connect(function() 
-				addSong(newItem.Result_Uri.Value)
-				syn.request(requests["NextSong"])
-			end)
-		end
+		newItem.Result_Clicked.MouseButton1Click:Connect(function() 
+			addSong(newItem.Result_Uri.Value)
+			syn.request(requests["NextSong"])
+		end)
 	end
-)
+end)
 
-PausePlay.MouseButton1Down:Connect(
-	function()
-		if (currentSong == nil) then 
-			return 
-		end
-
-		if currentSong.is_playing == true then
-			syn.request(requests["Pause"])
-
-			PausePlay.Pause.Visible = false
-			PausePlay.Play.Visible = true
-		elseif currentSong.is_playing == false then
-			syn.request(requests["Play"])
-			PausePlay.Pause.Visible = true
-			PausePlay.Play.Visible = false
-		end
+PausePlay.MouseButton1Down:Connect(function()
+	if (currentSong == nil) then 
+		return 
 	end
-)
+
+	if currentSong.is_playing == true then
+		syn.request(requests["Pause"])
+
+		PausePlay.Pause.Visible = false
+		PausePlay.Play.Visible = true
+	elseif currentSong.is_playing == false then
+		syn.request(requests["Play"])
+		PausePlay.Pause.Visible = true
+		PausePlay.Play.Visible = false
+	end
+end)
 
 local function GTZVDOE_fake_script()
 	local script = Instance.new("LocalScript", NowPlaying)
