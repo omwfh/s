@@ -130,10 +130,6 @@ local addSong = function(uri)
 	})
 end
 
--------------------------------------------------------------------------
-
-notify("ROBLOX Spotify", "Successfully loaded!\nPress insert to open and close!", 2)
-
 local Spotify = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
 local Corner = Instance.new("UICorner")
@@ -522,6 +518,10 @@ Title.TextTruncate = 1
 
 ExampleResult.Visible = false
 
+Exit.MouseButton1Click:Connect(function()
+	Spotify:Destroy()
+end)
+
 uis.InputBegan:Connect(
 	function(input, wido)
 		if (input.KeyCode == Enum.KeyCode.P) then
@@ -675,7 +675,6 @@ local function GTZVDOE_fake_script()
 	artistLabel.Text = "N/A"
 	titleLabel.Text = "N/A"
 	CurrentAlbumCover.Data = ""
-	print(resp.Body)
 end
 coroutine.wrap(GTZVDOE_fake_script)()
 
@@ -737,3 +736,6 @@ local function WPKTJK_fake_script()
 	runService.Heartbeat:Connect(Update)
 end
 coroutine.wrap(WPKTJK_fake_script)()
+
+
+notify("ROBLOX Spotify", "Successfully loaded!\nPress 'P' to open and close!", 2)
