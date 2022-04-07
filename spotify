@@ -86,7 +86,7 @@ local urlencode = function(url)
 	end
 
 	url = url:gsub("\n", "\r\n")
-	url = url:gsub("([^%w _%%%-%.~])", char_to_hex)
+	url = url:gsub("([^%w _%%%-%.~])", char_to_hex())
 	url = url:gsub(" ", "+")
 	return url
 end
@@ -97,7 +97,7 @@ local urldecode = function(url)
 	end
 
 	url = url:gsub("+", " ")
-	url = url:gsub("%%(%x%x)", hex_to_char)
+	url = url:gsub("%%(%x%x)", hex_to_char())
 	return url
 end
 
@@ -129,6 +129,8 @@ local addSong = function(uri)
 		}
 	})
 end
+
+notify("ROBLOX Spotify", "Successfully loaded!\nPress 'P' to open and close!", 2)
 
 local Spotify = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
@@ -504,7 +506,7 @@ Line.Size = UDim2.new(0, 125, 0, 0)
 
 CurrentAlbumCover.Visible = true
 CurrentAlbumCover.Size = Vector2.new(51, 49)
-CurrentAlbumCover.Position = Vector2.new(Main.AbsolutePosition + 0.014, Main.AbsolutePosition + 0.109)
+CurrentAlbumCover.Position = Vector2.new(Main.AbsolutePosition + .014, Main.AbsolutePosition + .109)
 
 Result_Uri.Parent = ExampleResult
 Result_Uri.Name = "Result_Uri"
@@ -736,6 +738,3 @@ coroutine.wrap(GTZVDOE_fake_script)()
 --	runService.Heartbeat:Connect(Update)
 --end
 --coroutine.wrap(WPKTJK_fake_script)()
-
-
-notify("ROBLOX Spotify", "Successfully loaded!\nPress 'P' to open and close!", 2)
