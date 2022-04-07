@@ -1,0 +1,739 @@
+if (not apikey) then 
+	game.Players.LocalPlayer:Kick("API Key not detected! Did you follow instructions correctly?") 
+end
+
+local requests = {
+	["CurrentlyPlaying"] = {
+		Url = "https://api.spotify.com/v1/me/player/currently-playing",
+		Method = "GET",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	},
+	["NextSong"] = {
+		Url = "https://api.spotify.com/v1/me/player/next",
+		Method = "POST",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	},
+	["LastSong"] = {
+		Url = "https://api.spotify.com/v1/me/player/previous",
+		Method = "POST",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	},
+	["Pause"] = {
+		Url = "https://api.spotify.com/v1/me/player/pause",
+		Method = "PUT",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	},
+	["Play"] = {
+		Url = "https://api.spotify.com/v1/me/player/play",
+		Method = "PUT",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	},
+}
+
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+local http = game:GetService("HttpService")
+local uis = game:GetService("UserInputService")
+local startergui = game:GetService("StarterGui")
+local repStorage = game:GetService("ReplicatedStorage")
+
+local CurrentAlbumCover = Drawing.new("Image")
+local Result_Uri = Instance.new("StringValue")
+
+local notify = function(title, message, duration)
+	startergui:SetCore("SendNotification", {
+		Title = title,
+		Text = message,
+		Duration = duration,
+		Button1 = "OK"
+	})
+end
+
+local plrChat = function(...) 
+	repStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(..., "All")
+end
+
+local char_to_hex = function(c)
+	return string.format("%%%02X", string.byte(c))
+end
+
+local hex_to_char = function(x)
+	return string.char(tonumber(x, 16))
+end
+
+local urlencode = function(url)
+	if (url == nil) then
+		return
+	end
+
+	url = url:gsub("\n", "\r\n")
+	url = url:gsub("([^%w _%%%-%.~])", char_to_hex)
+	url = url:gsub(" ", "+")
+	return url
+end
+
+local urldecode = function(url)
+	if (url == nil) then
+		return
+	end
+
+	url = url:gsub("+", " ")
+	url = url:gsub("%%(%x%x)", hex_to_char)
+	return url
+end
+
+local searchSongs = function(query, limit)
+	local resp =
+		syn.request(
+			{
+				Url = "https://api.spotify.com/v1/search?q=" .. urlencode(query) .. "&type=track&limit=" .. limit,
+				Method = "GET",
+				Headers = {
+					["Accept"] = "application/json",
+					["Authorization"] = "Bearer " .. apikey,
+					["Content-Type"] = "application/json"
+				}
+			}
+		)
+
+	return http:JSONDecode(resp.Body)
+end
+
+local addSong = function(uri)
+	local resp = syn.request({
+		Url = "https://api.spotify.com/v1/me/player/queue?uri=" .. urlencode(uri),
+		Method = "POST",
+		Headers = {
+			["Accept"] = "application/json",
+			["Authorization"] = "Bearer " .. apikey,
+			["Content-Type"] = "application/json"
+		}
+	})
+end
+
+-------------------------------------------------------------------------
+
+notify("ROBLOX Spotify", "Successfully loaded!\nPress insert to open and close!", 2)
+
+local Spotify = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local Corner = Instance.new("UICorner")
+local dots = Instance.new("TextLabel")
+local Home = Instance.new("ImageLabel")
+local Home_2 = Instance.new("TextButton")
+local Search = Instance.new("ImageLabel")
+local Search_2 = Instance.new("TextButton")
+local Library = Instance.new("ImageLabel")
+local Library_2 = Instance.new("TextButton")
+local OtherMain = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Bar = Instance.new("Frame")
+local SearchBar = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local Search_3 = Instance.new("ImageLabel")
+local Textbox = Instance.new("TextBox")
+local UICorner_3 = Instance.new("UICorner")
+local Results = Instance.new("ScrollingFrame")
+local ExampleResult = Instance.new("Frame")
+local UICorner_4 = Instance.new("UICorner")
+local Result_Artist = Instance.new("TextLabel")
+local Result_Clicked = Instance.new("ImageButton")
+local Result_Title = Instance.new("TextLabel")
+local UIGridLayout = Instance.new("UIGridLayout")
+local TextLabel = Instance.new("TextLabel")
+local Exit = Instance.new("ImageButton")
+local NowPlaying = Instance.new("Frame")
+local UICorner_5 = Instance.new("UICorner")
+local Bar_2 = Instance.new("Frame")
+local Thumbnail = Instance.new("ImageLabel")
+local Title = Instance.new("TextLabel")
+local Artist = Instance.new("TextLabel")
+local PausePlay = Instance.new("ImageButton")
+local Play = Instance.new("ImageLabel")
+local Pause = Instance.new("ImageLabel")
+local Previous = Instance.new("ImageButton")
+local Next = Instance.new("ImageButton")
+local Line = Instance.new("Frame")
+
+Spotify.Name = "Spotify"
+Spotify.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Spotify.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Spotify.ResetOnSpawn = false
+
+Main.Name = "Main"
+Main.Parent = Spotify
+Main.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
+Main.Position = UDim2.new(0.0931122825, 0, 0.0626223087, 0)
+Main.Size = UDim2.new(0, 665, 0, 435)
+
+Corner.CornerRadius = UDim.new(0, 7)
+Corner.Name = "Corner"
+Corner.Parent = Main
+
+dots.Name = "dots"
+dots.Parent = Main
+dots.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+dots.BackgroundTransparency = 1.000
+dots.BorderSizePixel = 0
+dots.Position = UDim2.new(0.0136363655, 0, -0.0206896551, 0)
+dots.Size = UDim2.new(0, 44, 0, 42)
+dots.Font = Enum.Font.SourceSans
+dots.Text = "..."
+dots.TextColor3 = Color3.fromRGB(255, 255, 255)
+dots.TextScaled = true
+dots.TextSize = 14.000
+dots.TextWrapped = true
+
+Home.Name = "Home"
+Home.Parent = Main
+Home.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Home.BackgroundTransparency = 1.000
+Home.Position = UDim2.new(0.0257461779, 0, 0.105747126, 0)
+Home.Size = UDim2.new(0, 20, 0, 20)
+Home.Image = "rbxassetid://7072717697"
+
+Home_2.Name = "Home"
+Home_2.Parent = Home
+Home_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Home_2.BackgroundTransparency = 1.000
+Home_2.BorderSizePixel = 0
+Home_2.Position = UDim2.new(3.81469732e-07, 0, 0.041223906, 0)
+Home_2.Size = UDim2.new(0, 83, 0, 19)
+Home_2.Font = Enum.Font.SourceSansBold
+Home_2.Text = "     Home"
+Home_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Home_2.TextSize = 18.000
+Home_2.TextTransparency = 0.200
+Home_2.TextWrapped = true
+
+Search.Name = "Search"
+Search.Parent = Home
+Search.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Search.BackgroundTransparency = 1.000
+Search.Position = UDim2.new(-0.00873680133, 0, 1.44146156, 0)
+Search.Size = UDim2.new(0, 20, 0, 20)
+Search.Image = "rbxassetid://7072721559"
+
+Search_2.Name = "Search"
+Search_2.Parent = Search
+Search_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Search_2.BackgroundTransparency = 1.000
+Search_2.BorderSizePixel = 0
+Search_2.Position = UDim2.new(0, 0, 0.00853843708, 0)
+Search_2.Size = UDim2.new(0, 90, 0, 20)
+Search_2.Font = Enum.Font.SourceSansBold
+Search_2.Text = "      Search"
+Search_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Search_2.TextSize = 18.000
+Search_2.TextWrapped = true
+
+Library.Name = "Library"
+Library.Parent = Search
+Library.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Library.BackgroundTransparency = 1.000
+Library.Position = UDim2.new(-0.00873680133, 0, 1.54146171, 0)
+Library.Size = UDim2.new(0, 20, 0, 20)
+Library.Image = "rbxassetid://7072706216"
+
+Library_2.Name = "Library"
+Library_2.Parent = Library
+Library_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Library_2.BackgroundTransparency = 1.000
+Library_2.BorderSizePixel = 0
+Library_2.Position = UDim2.new(-3.81469732e-07, 0, 0, 0)
+Library_2.Size = UDim2.new(0, 90, 0, 20)
+Library_2.Font = Enum.Font.SourceSansBold
+Library_2.Text = "       Library"
+Library_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Library_2.TextSize = 18.000
+Library_2.TextTransparency = 0.200
+Library_2.TextWrapped = true
+
+OtherMain.Name = "OtherMain"
+OtherMain.Parent = Main
+OtherMain.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+OtherMain.Position = UDim2.new(0.21654135, 0, 0, 0)
+OtherMain.Size = UDim2.new(0, 521, 0, 435)
+
+UICorner.CornerRadius = UDim.new(0, 7)
+UICorner.Parent = OtherMain
+
+Bar.Name = "Bar"
+Bar.Parent = OtherMain
+Bar.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
+Bar.BorderSizePixel = 0
+Bar.Position = UDim2.new(-0.0115163149, 0, 0, 0)
+Bar.Size = UDim2.new(0, 12, 0, 435)
+
+SearchBar.Name = "SearchBar"
+SearchBar.Parent = OtherMain
+SearchBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SearchBar.Position = UDim2.new(0.0501083992, 0, 0.0436781608, 0)
+SearchBar.Size = UDim2.new(0, 54, 0, 33)
+
+UICorner_2.CornerRadius = UDim.new(0, 10)
+UICorner_2.Parent = SearchBar
+
+Search_3.Name = "Search"
+Search_3.Parent = SearchBar
+Search_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Search_3.BackgroundTransparency = 1.000
+Search_3.Position = UDim2.new(0.159111872, 0, 0.146196306, 0)
+Search_3.Size = UDim2.new(0, 23, 0, 23)
+Search_3.Image = "rbxassetid://7072721559"
+Search_3.ImageColor3 = Color3.fromRGB(0, 0, 0)
+Search_3.ScaleType = Enum.ScaleType.Fit
+
+Textbox.Name = "Textbox"
+Textbox.Parent = SearchBar
+Textbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Textbox.BorderSizePixel = 0
+Textbox.LayoutOrder = 1
+Textbox.Position = UDim2.new(0.73522383, 0, -0.000417998352, 0)
+Textbox.Size = UDim2.new(0, 201, 0, 33)
+Textbox.Font = Enum.Font.SourceSans
+Textbox.PlaceholderColor3 = Color3.fromRGB(63, 63, 63)
+Textbox.PlaceholderText = "Artists, songs, or podcasts."
+Textbox.Text = ""
+Textbox.TextColor3 = Color3.fromRGB(0, 0, 0)
+Textbox.TextSize = 14.000
+Textbox.TextXAlignment = Enum.TextXAlignment.Left
+
+UICorner_3.CornerRadius = UDim.new(0, 10)
+UICorner_3.Parent = Textbox
+
+Results.Name = "Results"
+Results.Parent = SearchBar
+Results.Active = true
+Results.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Results.BackgroundTransparency = 1.000
+Results.BorderColor3 = Color3.fromRGB(27, 42, 53)
+Results.BorderSizePixel = 0
+Results.Position = UDim2.new(0, 0, 2.29785538, 0)
+Results.Size = UDim2.new(0, 469, 0, 256)
+Results.HorizontalScrollBarInset = Enum.ScrollBarInset.Always
+
+ExampleResult.Name = "ExampleResult"
+ExampleResult.Parent = Results
+ExampleResult.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+ExampleResult.BorderSizePixel = 0
+ExampleResult.Position = UDim2.new(-0.364605546, 0, 0.0938628167, 0)
+ExampleResult.Size = UDim2.new(0, 100, 0, 100)
+
+UICorner_4.Parent = ExampleResult
+
+Result_Artist.Name = "Result_Artist"
+Result_Artist.Parent = ExampleResult
+Result_Artist.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Result_Artist.BackgroundTransparency = 1.000
+Result_Artist.BorderSizePixel = 0
+Result_Artist.Position = UDim2.new(0.0217351839, 0, 0.467083365, 0)
+Result_Artist.Size = UDim2.new(0, 400, 0, 20)
+Result_Artist.Font = Enum.Font.SourceSans
+Result_Artist.Text = "Artist"
+Result_Artist.TextColor3 = Color3.fromRGB(168, 168, 168)
+Result_Artist.TextSize = 14.000
+Result_Artist.TextXAlignment = Enum.TextXAlignment.Left
+
+Result_Clicked.Name = "Result_Clicked"
+Result_Clicked.Parent = ExampleResult
+Result_Clicked.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Result_Clicked.BackgroundTransparency = 1.000
+Result_Clicked.BorderSizePixel = 0
+Result_Clicked.Size = UDim2.new(0, 447, 0, 45)
+
+Result_Title.Name = "Result_Title"
+Result_Title.Parent = ExampleResult
+Result_Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Result_Title.BackgroundTransparency = 1.000
+Result_Title.BorderSizePixel = 0
+Result_Title.Position = UDim2.new(0.0217351839, 0, 0, 0)
+Result_Title.Size = UDim2.new(0, 400, 0, 20)
+Result_Title.Font = Enum.Font.SourceSansBold
+Result_Title.Text = "Song Name"
+Result_Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Result_Title.TextSize = 14.000
+Result_Title.TextXAlignment = Enum.TextXAlignment.Left
+Result_Title.TextYAlignment = Enum.TextYAlignment.Bottom
+
+UIGridLayout.Parent = Results
+UIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIGridLayout.CellPadding = UDim2.new(0, 5, 0, 10)
+UIGridLayout.CellSize = UDim2.new(0, 447, 0, 45)
+
+TextLabel.Parent = SearchBar
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0, 0, 1.41892362, 0)
+TextLabel.Size = UDim2.new(0, 207, 0, 19)
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "Top result"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+Exit.Name = "Exit"
+Exit.Parent = Main
+Exit.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Exit.BackgroundTransparency = 1.000
+Exit.BorderSizePixel = 0
+Exit.Position = UDim2.new(0.927819729, 0, 0.0413793102, 0)
+Exit.Size = UDim2.new(0, 29, 0, 28)
+Exit.Image = "rbxassetid://7072725342"
+
+NowPlaying.Name = "NowPlaying"
+NowPlaying.Parent = Main
+NowPlaying.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+NowPlaying.Position = UDim2.new(0, 0, 0.852873504, 0)
+NowPlaying.Size = UDim2.new(0, 665, 0, 64)
+
+UICorner_5.CornerRadius = UDim.new(0, 7)
+UICorner_5.Parent = NowPlaying
+
+Bar_2.Name = "Bar"
+Bar_2.Parent = NowPlaying
+Bar_2.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+Bar_2.BorderSizePixel = 0
+Bar_2.Size = UDim2.new(0, 665, 0, 7)
+
+Thumbnail.Name = "Thumbnail"
+Thumbnail.Parent = NowPlaying
+Thumbnail.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Thumbnail.BackgroundTransparency = 1.000
+Thumbnail.BorderSizePixel = 0
+Thumbnail.Position = UDim2.new(0.0135338344, 0, 0.109375, 0)
+Thumbnail.Size = UDim2.new(0, 51, 0, 49)
+
+Title.Name = "Title"
+Title.Parent = Thumbnail
+Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1.000
+Title.Position = UDim2.new(1.21568632, 0, 0.122448981, 0)
+Title.Size = UDim2.new(0, 138, 0, 18)
+Title.Font = Enum.Font.SourceSansBold
+Title.Text = "N/A"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextScaled = true
+Title.TextSize = 14.000
+Title.TextTransparency = 0.150
+Title.TextWrapped = true
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+Artist.Name = "Artist"
+Artist.Parent = Title
+Artist.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Artist.BackgroundTransparency = 1.000
+Artist.Position = UDim2.new(-0.00170489331, 0, 0.989795268, 0)
+Artist.Size = UDim2.new(0, 138, 0, 15)
+Artist.Font = Enum.Font.SourceSans
+Artist.Text = "N/A"
+Artist.TextColor3 = Color3.fromRGB(255, 255, 255)
+Artist.TextScaled = true
+Artist.TextSize = 14.000
+Artist.TextTransparency = 0.450
+Artist.TextWrapped = true
+Artist.TextXAlignment = Enum.TextXAlignment.Left
+
+PausePlay.Name = "PausePlay"
+PausePlay.Parent = NowPlaying
+PausePlay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+PausePlay.BackgroundTransparency = 1.000
+PausePlay.BorderSizePixel = 0
+PausePlay.Position = UDim2.new(0.497744352, 0, 0.265625, 0)
+PausePlay.Size = UDim2.new(0, 30, 0, 30)
+
+Play.Name = "Play"
+Play.Parent = PausePlay
+Play.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Play.BackgroundTransparency = 1.000
+Play.Position = UDim2.new(-0.0666666701, 0, 0, 0)
+Play.Size = UDim2.new(0, 30, 0, 30)
+Play.Image = "rbxassetid://7072720722"
+
+Pause.Name = "Pause"
+Pause.Parent = PausePlay
+Pause.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Pause.BackgroundTransparency = 1.000
+Pause.Position = UDim2.new(-0.0666666701, 0, 0, 0)
+Pause.Size = UDim2.new(0, 30, 0, 30)
+Pause.Visible = false
+Pause.Image = "rbxassetid://7072720054"
+
+Previous.Name = "Previous"
+Previous.Parent = NowPlaying
+Previous.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Previous.BackgroundTransparency = 1.000
+Previous.BorderSizePixel = 0
+Previous.Position = UDim2.new(0.439097762, 0, 0.25, 0)
+Previous.Size = UDim2.new(0, 30, 0, 30)
+Previous.Image = "rbxassetid://7072706889"
+
+Next.Name = "Next"
+Next.Parent = NowPlaying
+Next.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Next.BackgroundTransparency = 1.000
+Next.BorderSizePixel = 0
+Next.Position = UDim2.new(0.551879704, 0, 0.265625, 0)
+Next.Size = UDim2.new(0, 30, 0, 30)
+Next.Image = "rbxassetid://7072706959"
+
+Line.Name = "Line"
+Line.Parent = Main
+Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Line.BackgroundTransparency = 0.200
+Line.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Line.Position = UDim2.new(0.0181476325, 0, 0.351724148, 0)
+Line.Size = UDim2.new(0, 125, 0, 0)
+
+CurrentAlbumCover.Visible = true
+CurrentAlbumCover.Size = Vector2.new(51, 49)
+CurrentAlbumCover.Position = Vector2.new(Main.AbsolutePosition + 0.014, Main.AbsolutePosition + 0.109)
+
+Result_Uri.Parent = ExampleResult
+Result_Uri.Name = "Result_Uri"
+Result_Uri.Value = ""
+
+Result_Artist.TextTruncate = 1
+Result_Title.TextTruncate = 1
+
+Artist.TextTruncate = 1
+Title.TextTruncate = 1
+
+ExampleResult.Visible = false
+
+uis.InputBegan:Connect(
+	function(input, wido)
+		if (input.KeyCode == Enum.KeyCode.P) then
+			if (Main.Visible == true) then
+				Main.Visible = false
+				
+				if (CurrentAlbumCover.Visible == true) then
+					CurrentAlbumCover.Visible = false
+				end
+			elseif (Main.Visible == false) then
+				Main.Visible = true
+				
+				if (CurrentAlbumCover.Visible == false) then
+					CurrentAlbumCover.Visible = true
+				end
+			end
+		end
+	end
+)
+
+Next.MouseButton1Click:Connect(
+	function()
+		syn.request(requests["NextSong"])
+	end
+)
+
+Previous.MouseButton1Click:Connect(
+	function()
+		syn.request(requests["LastSong"])
+	end
+)
+
+PausePlay.MouseButton1Down:Connect(
+	function()
+		if (currentSong == nil) then 
+			return 
+		end
+
+		if currentSong.is_playing == true then
+			syn.request(requests["Pause"])
+
+			PausePlay.Pause.Visible = false
+			PausePlay.Play.Visible = true
+		elseif currentSong.is_playing == false then
+			syn.request(requests["Play"])
+			PausePlay.Pause.Visible = true
+			PausePlay.Play.Visible = false
+		end
+	end
+)
+
+
+SearchBar.TextBox.FocusLost:Connect(
+	function(enterPressed, bruh)
+		if (not enterPressed) then
+			return
+		end
+
+		for _, v in next, Search.ScrollingFrame:GetChildren() do
+			if (not v:IsA("Frame") or v.Name == "ExampleResult") then
+				continue
+			end
+
+			v:Destroy()
+		end
+
+		local songs = searchSongs(SearchBar.TextBox.Text, 20)
+		if (songs.error) then
+			notify("Oh no! An error occurred!", songs.error.message, 2)
+			return
+		end
+
+		for i, v in next, songs.tracks.items do
+			local artists = v.artists
+			local artistString = artists[1].name
+
+			for i, v in next, artists do
+				if (v.name == artists[1].name) then
+					continue
+				end
+
+				artistString = artistString .. ", " .. v.name
+			end
+
+			local newItem = ExampleResult:Clone()
+			newItem.Parent = SearchBar.Results
+			newItem.Name = v.name
+			newItem.Visible = true
+			newItem.Result_Artist.Text = artistString
+			newItem.Result_Title.Text = v.name
+			newItem.Result_Uri.Value = v.uri
+
+			newItem.Result_Clicked.MouseButton1Click:Connect(function() 
+				addSong(newItem.Result_Uri.Value)
+				syn.request(requests["NextSong"])
+			end)
+		end
+	end
+)
+
+local function GTZVDOE_fake_script()
+	local script = Instance.new("LocalScript", NowPlaying)
+
+	local artistLabel = script.Parent.Thumbnail.Title.Artist
+	local titleLabel = script.Parent.Thumbnail.Title
+	local previousSong = nil
+	while wait() do
+		local resp = syn.request(requests["CurrentlyPlaying"])
+
+		if (resp.Body == "") then
+			artistLabel.Text = "N/A"
+			titleLabel.Text = "Nothing is currently playing!"
+			CurrentAlbumCover.Data = ""
+			print(resp.Body)
+
+			continue
+		end
+
+		currentSong = http:JSONDecode(resp.Body)
+
+		if (currentSong.error) then
+			notify("Oh no! An error occurred!", currentSong.error.message, 0.5)
+			wait(3)
+			continue
+		elseif ((currentSong.item == nil) or (previousSong and previousSong == currentSong.item.name)) then
+			continue
+		elseif (previousSong ~= currentSong.item.name) then
+			notify("Now Playing!", currentSong.item.name .. "\nBy " .. currentSong.item.artists[1].name, 0.5)
+
+			previousSong = currentSong.item.name
+		end
+
+		local artists = currentSong.item.artists
+		local artistString = artists[1].name
+
+		for i, v in next, artists do
+			if (v.name == artists[1].name) then
+				continue
+			end
+
+			artistString = artistString .. ", " .. v.name
+		end
+
+		CurrentAlbumCover.Data = game:HttpGet(tostring(currentSong.item.album.images[3].url))
+		artistLabel.Text = artistString
+		titleLabel.Text = currentSong.item.name
+
+		print("playing " .. currentSong.item.name)
+	end
+
+	artistLabel.Text = "N/A"
+	titleLabel.Text = "N/A"
+	CurrentAlbumCover.Data = ""
+	print(resp.Body)
+end
+coroutine.wrap(GTZVDOE_fake_script)()
+
+local function WPKTJK_fake_script()
+	local script = Instance.new('LocalScript', Main)
+
+	local UserInputService = game:GetService("UserInputService")
+	local runService = (game:GetService("RunService"));
+	
+	local gui = script.Parent
+	
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
+	
+	local function Lerp(a, b, m)
+		return a + (b - a) * m
+	end;
+	
+	local lastMousePos
+	local lastGoalPos
+	local DRAG_SPEED = (8)
+	local function Update(dt)
+		if not (startPos) then return end;
+		if not (dragging) and (lastGoalPos) then
+			gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+			return 
+		end;
+	
+		local delta = (lastMousePos - UserInputService:GetMouseLocation())
+		local xGoal = (startPos.X.Offset - delta.X);
+		local yGoal = (startPos.Y.Offset - delta.Y);
+		lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+		gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
+	end;
+	
+	gui.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = gui.Position
+			lastMousePos = UserInputService:GetMouseLocation()
+	
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	
+	gui.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	
+	runService.Heartbeat:Connect(Update)
+end
+coroutine.wrap(WPKTJK_fake_script)()
