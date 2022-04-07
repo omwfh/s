@@ -356,8 +356,8 @@ Result_Clicked.Parent = ExampleResult
 Result_Clicked.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Result_Clicked.BackgroundTransparency = 1.000
 Result_Clicked.BorderSizePixel = 0
-Result_Clicked.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 Result_Clicked.Size = UDim2.new(0, 447, 0, 45)
+Result_Clicked.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 Result_Clicked.ImageTransparency = 1.000
 
 Result_Title.Name = "Result_Title"
@@ -365,10 +365,10 @@ Result_Title.Parent = ExampleResult
 Result_Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Result_Title.BackgroundTransparency = 1.000
 Result_Title.BorderSizePixel = 0
-Result_Title.Position = UDim2.new(0.0217351839, 0, 0, 0)
+Result_Title.Position = UDim2.new({0.0217351839, 0},{0, 0})
 Result_Title.Size = UDim2.new(0, 400, 0, 20)
 Result_Title.Font = Enum.Font.SourceSansBold
-Result_Title.Text = "Song Name"
+Result_Title.Text = "Title"
 Result_Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Result_Title.TextSize = 14.000
 Result_Title.TextXAlignment = Enum.TextXAlignment.Left
@@ -522,7 +522,7 @@ Title.TextTruncate = 1
 ExampleResult.Visible = false
 
 uis.InputBegan:Connect(function(input)
-	if (input.KeyCode == Enum.KeyCode.X) then
+	if (input.KeyCode == Enum.KeyCode.P	) then
 		if (Main.Visible == true) then
 			Main.Visible = false
 
@@ -547,7 +547,7 @@ Previous.MouseButton1Down:Connect(function()
 	syn.request(requests["LastSong"])
 end)
 
-SearchBox.TextBox.FocusLost:Connect(function(enterPressed, bruh)
+SearchBox.TextBox.FocusLost:Connect(function(enterPressed)
 	if (not enterPressed) then
 		return
 	end
