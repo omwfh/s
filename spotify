@@ -608,17 +608,18 @@ PausePlay.MouseButton1Down:Connect(function()
 end)
 
 local function GTZVDOE_fake_script()
-	local script = Instance.new("LocalScript", NowPlaying)
+	local script = Instance.new("LocalScript", Main.NowPlaying)
 
-	local artistLabel = script.Parent.Thumbnail.Title.Artist
-	local titleLabel = script.Parent.Thumbnail.Title
+	local artistLabel = NowPlaying.Thumbnail.Title.Artist
+	local titleLabel = NowPlaying.Thumbnail.Title
 	local previousSong = nil
+	
 	while wait() do
 		local resp = syn.request(requests["CurrentlyPlaying"])
 
 		if (resp.Body == "") then
 			artistLabel.Text = "N/A"
-			titleLabel.Text = "Nothing is currently playing!"
+			titleLabel.Text = "N/A"
 			CurrentAlbumCover.Data = ""
 			print(resp.Body)
 
@@ -660,65 +661,7 @@ local function GTZVDOE_fake_script()
 	artistLabel.Text = "N/A"
 	titleLabel.Text = "N/A"
 	CurrentAlbumCover.Data = ""
+	print(resp.Body)
 end
 
 coroutine.wrap(GTZVDOE_fake_script)()
-
-local function WPKTJK_fake_script()
-	local script = Instance.new('LocalScript', Main)
-
-	local UserInputService = game:GetService("UserInputService")
-	local runService = (game:GetService("RunService"));
-	
-	local gui = script.Parent
-	
-	local dragging
-	local dragInput
-	local dragStart
-	local startPos
-	
-	local function Lerp(a, b, m)
-		return a + (b - a) * m
-	end
-	
-	local lastMousePos
-	local lastGoalPos
-	local DRAG_SPEED = (8)
-	local function Update(dt)
-		if not (startPos) then return end;
-		if not (dragging) and (lastGoalPos) then
-			gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
-			return 
-		end
-	
-		local delta = (lastMousePos - UserInputService:GetMouseLocation())
-		local xGoal = (startPos.X.Offset - delta.X);
-		local yGoal = (startPos.Y.Offset - delta.Y);
-		lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
-		gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
-	end
-	
-	gui.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			dragStart = input.Position
-			startPos = gui.Position
-			lastMousePos = UserInputService:GetMouseLocation()
-	
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-				end
-			end)
-		end
-	end)
-	
-	gui.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-			dragInput = input
-		end
-	end)
-	
-	runService.Heartbeat:Connect(Update)
-end
-coroutine.wrap(WPKTJK_fake_script)()
