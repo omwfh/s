@@ -38,9 +38,7 @@ end)
 
 local r = Instance.new('Sound')
 r.Parent = game.Workspace
-r.Volume = 2.5
+r.Volume = 500
 r.SoundId = "rbxassetid://9314705681"
 r.Name= " "
 r:Play()
-wait(2)
-r:Destroy()
