@@ -12,6 +12,14 @@ local i = {SilentAim = true, AimLock = true, Prediction = 0.165}
 
 getgenv().DaHoodSettings = i
 
+if _G.ESP == true then
+	pcall(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/esp.lua"))()
+	end)
+elseif _G.ESP == false then
+	print("ESP Disabled")
+end
+
 function a.Check() if not (a.Enabled == true and a.Selected ~= f and a.SelectedPart ~= nil) then
 		return false 
 	end
