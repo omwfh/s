@@ -32,7 +32,7 @@ for i,v in pairs(game.Players:GetChildren()) do
     HealthBar.Thickness = 1
     HealthBar.Filled = false
     Healthbar.Color = Color3.new(124,252,0)
-    HealthBar.Transparency = 1
+    HealthBar.Transparency = 0
     HealthBar.Visible = false
 
     function boxesp()
@@ -121,7 +121,7 @@ game.Players.PlayerAdded:Connect(function(v)
     HealthBar.Thickness = 1
     HealthBar.Filled = false
     HealthBar.Color = Color3.new(124,252,0)
-    HealthBar.Transparency = 1
+    HealthBar.Transparency = 0
     HealthBar.Visible = false
 
     function boxesp()
