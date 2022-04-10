@@ -29,10 +29,10 @@ for i,v in pairs(game.Players:GetChildren()) do
     HealthBarOutline.Visible = false
 
     local HealthBar = Drawing.new("Square")
-    HealthBar.Thickness = 1
+    HealthBar.Thickness = 1.2
     HealthBar.Filled = false
     Healthbar.Color = Color3.new(124,252,0)
-    HealthBar.Transparency = 0
+    HealthBar.Transparency = 1
     HealthBar.Visible = false
 
     function boxesp()
@@ -118,10 +118,10 @@ game.Players.PlayerAdded:Connect(function(v)
     HealthBarOutline.Visible = false
 
     local HealthBar = Drawing.new("Square")
-    HealthBar.Thickness = 1
+    HealthBar.Thickness = 1.2
     HealthBar.Filled = false
     HealthBar.Color = Color3.new(124,252,0)
-    HealthBar.Transparency = 0
+    HealthBar.Transparency = 1
     HealthBar.Visible = false
 
     function boxesp()
