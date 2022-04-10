@@ -31,6 +31,7 @@ for i,v in pairs(game.Players:GetChildren()) do
     local HealthBar = Drawing.new("Square")
     HealthBar.Thickness = 1
     HealthBar.Filled = false
+    Healthbar.Color = Color3.new(124,252,0)
     HealthBar.Transparency = 1
     HealthBar.Visible = false
 
@@ -119,6 +120,7 @@ game.Players.PlayerAdded:Connect(function(v)
     local HealthBar = Drawing.new("Square")
     HealthBar.Thickness = 1
     HealthBar.Filled = false
+    HealthBar.Color = Color3.new(124,252,0)
     HealthBar.Transparency = 1
     HealthBar.Visible = false
 
