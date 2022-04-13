@@ -52,32 +52,32 @@ local data = {
 				{
 					["name"] = "Kills",
 					["value"] = game.Players.LocalPlayer.CareerStatsCache.Kills.Value,
-					["inlines"] = true
+					["inline"] = true
 				},
 				{
 					["name"] = "Level",
 					["value"] = game.Players.LocalPlayer.CareerStatsCache.Level.Value,
-					["inlines"] = true,
+					["inline"] = true,
 				},
 				{
 					["name"] = "Deaths",
 					["value"] = game.Players.LocalPlayer.Data.KD.WOs.Value,
-					["inlines"] = true,
+					["inline"] = true,
 				},
 				{
 					["name"] = "Skin Equipped",
 					["value"] = game.Players.LocalPlayer.Data.Skin.Value,
-					["inlines"] = true,
+					["inline"] = true,
 				},
 				{
 					["name"] = "Melee Equipped",
 					["value"] = game.Players.LocalPlayer.Data.Melee.Value,
-					["inlines"] = true,
+					["inline"] = true,
 				},
 				{
 					["name"] = "Bucks",
 					["value"] = "$" .. game.Players.LocalPlayer.PlayerGui.Menew.ShopButtons.Bucks.Bucks.Text,
-					["inlines"] = true
+					["inline"] = true
 				}
 			},
 
