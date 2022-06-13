@@ -36,29 +36,39 @@ m = hookmetamethod(game, "__index", function(n,o) if n:IsA("Mouse") and (o == "H
 	return m(n,o)
 end)
 
+if _G.Kimbladi == true then
+	pcall(function()
+		local UIS = game:GetService("UserInputService")
+		local Client = game:GetService("Players").LocalPlayer
+		local Character = Client.Character or Client.CharacterAdded:Wait()
+		local Humanoid = Character:FindFirstChild("Humanoid")
+		local Animate = Character.Animate
+		
+		UIS.InputBegan:Connect(function(input, isTyping)
+			if not isTyping then
+				if input.UserInputType == Enum.KeyCode.KeypadFive or input.UserInputType == Enum.KeyCode.K then
+					pcall(function()
+						wait(0.2)
+						Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
+						Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=782841498"
+						Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
+						Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
+						Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
+						Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
+						Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
+						
+						Humanoid.Jump = false
+
+					end)
+				end
+			end
+		end)
+	end)
+end
+
 local r = Instance.new('Sound')
 r.Parent = game.Workspace
 r.Volume = 500
 r.SoundId = "rbxassetid://9314705681"
 r.Name= " "
 r:Play()
-
-local Client = game:GetService("Players").LocalPlayer
-local Character = Client.Character or Client.CharacterAdded:Wait()
-
-pcall(function()
-	while _G.Kimbladi == true do
-		local Animate = Character.Animate
-		Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
-		Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=782841498"
-		Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
-		Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
-		Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
-		Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
-		Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
-
-		game.Players.LocalPlayer.Character.Humanoid.Jump = false
-
-		wait(2)
-	end
-end)
