@@ -59,6 +59,6 @@ pcall(function()
 
 		game.Players.LocalPlayer.Character.Humanoid.Jump = false
 
-		wait(1)
+		wait(2)
 	end
 end)
