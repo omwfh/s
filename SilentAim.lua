@@ -43,10 +43,10 @@ if _G.Kimbladi == true then
 		local Character = Client.Character or Client.CharacterAdded:Wait()
 		local Humanoid = Character:FindFirstChild("Humanoid")
 		local Animate = Character.Animate
-		
+
 		UIS.InputBegan:Connect(function(input, isTyping)
 			if not isTyping then
-				if input.UserInputType == Enum.KeyCode.KeypadFive or input.UserInputType == Enum.KeyCode.K then
+				if input.UserInputType == Enum.KeyCode.KeypadFive then
 					pcall(function()
 						wait(0.2)
 						Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
@@ -56,7 +56,7 @@ if _G.Kimbladi == true then
 						Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
 						Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
 						Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
-						
+
 						Humanoid.Jump = false
 
 					end)
