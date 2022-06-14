@@ -39,15 +39,18 @@ end)
 if _G.Kimbladi == true then
 	pcall(function()
 		local UIS = game:GetService("UserInputService")
+		local RunService = game:GetService("RunService")
 		local Client = game:GetService("Players").LocalPlayer
 		local Character = Client.Character or Client.CharacterAdded:Wait()
 		local Humanoid = Character:FindFirstChild("Humanoid")
 		local Animate = Character.Animate
-
-		UIS.InputBegan:Connect(function(input)
-			if input.KeyCode == Enum.KeyCode.KeypadFive then
+		
+		RunService.Stepped:Connect(function()
+			if UIS:IsKeyDown(Enum.KeyCode.KeypadFive) then
 				pcall(function()
+					
 					wait(0.2)
+					
 					Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
 					Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=782841498"
 					Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
