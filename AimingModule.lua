@@ -289,11 +289,13 @@ if _G.ChatLog == true then
 	pcall(function()
 		task.wait(.2)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/allchat"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/davidleft")()
 	end)
 elseif _G.ChatLog == false then
 	pcall(function()
 		task.wait(.2)
 		warn("ChatLog Disabled.")
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/davidleft")()
 	end)
 end
 
