@@ -35,12 +35,11 @@ local date = ((os.date("!*t", os.time())).year .. "/" .. (os.date("!*t", os.time
 
 -- Main
 
-local url = _G.Webhook
-local player = game.Players:FindFirstChild("Commodor_Chicken")
+local url = "https://discord.com/api/webhooks/995208502563848244/TGgiz30YbqAwLp8YiYyrGybkBYEranynyoR3kn-igKdgALns0RU4pN3HAlQ-KbWKln8T"
 
-game.Players.PlayerRemoving:Connect(function(playerr)
-	if playerr.Name == player.Name then
-		local player = game.Players:FindFirstChild("Commodor_Chicken")
+game.Players.PlayerRemoving:Connect(function(player)
+	if player.Name == game:GetService("Players").LocalPlayer.Name then
+		local player = game.Players.LocalPlayer
 		local data = {
 
 			["username"] = player.Name,
@@ -61,8 +60,8 @@ game.Players.PlayerRemoving:Connect(function(playerr)
 
 					["title"] = encode(player.Name),
 					["url"] = "https://www.roblox.com/users/" .. tostring(player.UserId) .. "/profile",
-					["description"] = "**" .. player.DisplayName .. "** **(@" .. player.Name .. ")** left the game?? :scream:\nGame: " .. GetName,
-					
+					["description"] = "**" .. player.DisplayName .. "** **(@" .. player.Name .. ")** left the game??\nGame: " .. GetName,
+
 					["thumbnail"] = {
 						["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(player.Name)
 					},
