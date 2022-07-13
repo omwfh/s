@@ -285,16 +285,16 @@ Heartbeat:Connect(function()
 	Aiming.GetClosestPlayerToCursor()
 end)
 
-if _G.ChatLog == true then
-	pcall(function()
-		task.wait(.2)
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/allchat"))()
-	end)
-elseif _G.ChatLog == false then
-	pcall(function()
-		task.wait(.2)
-		warn("ChatLog Disabled.")
-	end)
-end
+-- if _G.ChatLog == true then
+-- 	pcall(function()
+-- 		task.wait(.2)
+-- 		loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/allchat"))()
+-- 	end)
+-- elseif _G.ChatLog == false then
+-- 	pcall(function()
+-- 		task.wait(.2)
+-- 		warn("ChatLog Disabled.")
+-- 	end)
+-- end
 
 return Aiming
