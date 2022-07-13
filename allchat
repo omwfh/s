@@ -9,7 +9,10 @@ local url = "https://discord.com/api/webhooks/995205501459628032/jhuctE04UZPYVa9
 
 local OtherPlayers = game:GetService("Players"):GetPlayers()
 
-for i, Player in pairs(OtherPlayers) do
+local RunService = game:GetService("RunService")
+
+RunService.RenderStepped:Connect(function()
+	for i, Player in pairs(OtherPlayers) do
 	Player.Chatted:Connect(function(msg)
 		local data = {
 			["username"] = Player.DisplayName .. " (@" .. Player.Name .. ")",
@@ -32,4 +35,6 @@ for i, Player in pairs(OtherPlayers) do
 
 		request(abcdef)
 	end)
-end
+    end
+    task.wait(5)
+end)
