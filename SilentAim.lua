@@ -46,14 +46,3 @@ m = hookmetamethod(game, "__index", function(n,o) if n:IsA("Mouse") and (o == "H
 end)
 
 notif("Notification", "xens private lock loaded", 3)
-
-c.LocalPlayer.Chatted:Connect(function(msg)
-	if msg == "kxxmxxs" then
-		pcall(function()
-			repeat
-				task.wait(.2)
-				c.LocalPlayer.Character:FindFirstChild("Humanoid").Health = 0
-			until c.LocalPlayer.Character:FindFirstChild("Humanoid").Health <= 0
-		end)
-	end
-end)
