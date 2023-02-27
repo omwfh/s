@@ -1,4 +1,14 @@
 local a = loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/AimingModule.lua"))()
+
+local function notif(Title, Text, Duration)
+	local CoreGUI = game:GetService("StarterGui")
+	CoreGUI:SetCore("SendNotification", {
+		Title = Title;
+		Text = Text;
+		Duration = Duration;
+	})
+end
+
 a.TeamCheck(false)
 
 local b = game:GetService("Workspace")
@@ -8,7 +18,7 @@ local e = game:GetService("UserInputService")
 local f = c.LocalPlayer
 local g = f:GetMouse()
 local h = b.CurrentCamera
-local i = {SilentAim = true, AimLock = true, Prediction = 0.165}
+local i = { SilentAim = true, AimLock = true, Prediction = 0.165 }
 
 getgenv().DaHoodSettings = i
 
@@ -20,29 +30,28 @@ function a.Check() if not (a.Enabled == true and a.Selected ~= f and a.SelectedP
 	local k = j:WaitForChild("BodyEffects")["K.O"].Value
 	local l = j:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
 
-	if k or l then return false end
+	if k or l then 
+        return false 
+    end
 	return true 
 end
 
-local function notif(Title, Text, Duration)
-	local CoreGUI = game:GetService("StarterGui")
-	CoreGUI:SetCore("SendNotification", {
-		Title = Title;
-		Text = Text;
-		Duration = Duration;
-	})
-end
-
 local m
-
 m = hookmetamethod(game, "__index", function(n,o) if n:IsA("Mouse") and (o == "Hit" or o == "Target") and a.Check() then
 		local p = a.SelectedPart
-		if i.SilentAim and(o == "Hit" or o == "Target") then
+		if i.SilentAim and (o == "Hit" or o == "Target") then
 			local q = p.CFrame + p.Velocity * i.Prediction
 			return o == "Hit" and q or p 
 		end 
 	end
-	return m(n,o)
+	return m(n, o)
 end)
 
-notif("Notification", "xens private lock loaded", 3)
+if _G.AimViewer == true then
+    pcall(function()
+        wait(0.02)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/aimviewer.lua"))()
+    end)
+end
+
+notif("Notification", "ruis private lock loaded", 5)
