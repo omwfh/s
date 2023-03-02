@@ -9,12 +9,6 @@ local function notif(Title, Text, Duration)
 	})
 end
 
-function checkifalive(player)
-    if player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health ~= 1 and player.Character:FindFirstChild("Head") then
-        return true
-    end
-end
-
 a.TeamCheck(false)
 
 local b = game:GetService("Workspace")
@@ -24,7 +18,7 @@ local e = game:GetService("UserInputService")
 local f = c.LocalPlayer
 local g = f:GetMouse()
 local h = b.CurrentCamera
-local i = { SilentAim = true, AimLock = true, Prediction = 0.165 }
+local i = { SilentAim = true, AimLock = true, Prediction = 0.167 }
 
 getgenv().DaHoodSettings = i
 
