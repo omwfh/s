@@ -53,17 +53,6 @@ m = hookmetamethod(game, "__index", function(n, o) if n:IsA("Mouse") and (o == "
 	return m(n, o)
 end)
 
-local n
-n = hookmetamethod(game, "__namecall", function(Self, ...)
-    local NameCallMethod = getnamecallmethod()
-
-    if tostring(string.lower(NameCallMethod)) == "kick" then
-        return nil
-    end
-    
-    return OldNameCall(Self, ...)
-end)
-
 if _G.AimViewer == true then
     pcall(function()
         wait(0.02)
