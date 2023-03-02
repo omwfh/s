@@ -23,28 +23,26 @@ local i = { SilentAim = true, AimLock = true, Prediction = 0.167 }
 getgenv().DaHoodSettings = i
 
 function a.Check() if not (a.Enabled == true and a.Selected ~= f and a.SelectedPart ~= nil) then
-		return false 
-	end
+	return false 
+end
 
-	local j = a.Character(a.Selected)
-	local k = j:WaitForChild("BodyEffects")["K.O"].Value
-	local l = j:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+local j = a.Character(a.Selected)
+local k = j:WaitForChild("BodyEffects")["K.O"].Value
+local l = j:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
 
-	if k or l then 
-        return false 
-    end
+if k or l then return false end
 	return true 
 end
 
 local m
-m = hookmetamethod(game, "__index", function(n, o) if n:IsA("Mouse") and (o == "Hit" or o == "Target") and a.Check() then
+m = hookmetamethod(game, "__index", function(n,o) if n:IsA("Mouse") and (o == "Hit" or o == "Target") and a.Check() then
 		local p = a.SelectedPart
 		if i.SilentAim and (o == "Hit" or o == "Target")  then
 			local q = p.CFrame + p.Velocity * i.Prediction
 			return o == "Hit" and q or p 
 		end 
 	end
-	return m(n, o)
+	return m(n,o)
 end)
 
 notif("Notification", "ruis private lock loaded", 5)
