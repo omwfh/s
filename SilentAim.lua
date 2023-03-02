@@ -47,11 +47,4 @@ m = hookmetamethod(game, "__index", function(n, o) if n:IsA("Mouse") and (o == "
 	return m(n, o)
 end)
 
-if _G.AimViewer == true then
-    pcall(function()
-        wait(0.02)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/aimviewer.lua"))()
-    end)
-end
-
 notif("Notification", "ruis private lock loaded", 5)
