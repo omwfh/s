@@ -103,6 +103,7 @@ Admin:CreateCommand("bring .", "Teleport to a player", function(args)
 	end
 	
 	local rootPart = character:FindFirstChild("HumanoidRootPart")
+	local rootPart2 = victimcharacter:FindFirstChild("HumanoidRootPart)
 	
 	if not rootPart then
 		Admin:PrintError("Could not find HumanoidRootPart for player '" .. args[2] .. "'.")
