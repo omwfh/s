@@ -45,4 +45,4 @@ m = hookmetamethod(game, "__index", function(n,o) if n:IsA("Mouse") and (o == "H
 	return m(n,o)
 end)
 
-notif("Notification", "ruis private lock loaded", 5)
+notif("Notification", "arts private lock loaded", 5)
