@@ -11,10 +11,8 @@ local function notif(Title, Text, Duration)
     })
 end
 
--- Configure aiming module
 a.TeamCheck(false)
 
--- Service and variable definitions
 local b = game:GetService("Workspace")
 local c = game:GetService("Players")
 local d = game:GetService("RunService")
@@ -24,11 +22,10 @@ local g = f:GetMouse()
 local h = b.CurrentCamera
 local i = { SilentAim = true, AimLock = true, Prediction = 0.165 }
 
--- Global settings
 getgenv().DaHoodSettings = i
 
--- Check function
-function a.Check() 
+-- Check function for the aiming module
+function a.Check()
     if not (a.Enabled == true and a.Selected ~= f and a.SelectedPart ~= nil) then
         return false 
     end
@@ -41,32 +38,54 @@ function a.Check()
     return true 
 end
 
--- Define the hook function
-local function hookFunction(original, n, o)
-    if n:IsA("Mouse") and (o == "Hit" or o == "Target") and a.Check() then
-        local p = a.SelectedPart
-        if i.SilentAim and (o == "Hit" or o == "Target") then
-            local q = p.CFrame + p.Velocity * i.Prediction
-            return o == "Hit" and q or p
+-- Function to set a table as read-only or writable
+function setreadonly(obj, val)
+    if type(obj) == 'table' then
+        local mt = getmetatable(obj) or {}
+        if val then
+            mt.__newindex = function(t, k, v)
+                error("attempt to modify readonly table", 2)
+            end
+        else
+            mt.__newindex = nil
         end
+        setmetatable(obj, mt)
+    else
+        error("expected a table for the first argument", 2)
     end
-    return original(n, o)
 end
 
--- Create a proxy for the game object
-local gameMeta = getrawmetatable(game)
-local oldIndex = gameMeta.__index
-
-gameMeta.__index = function(self, key)
-    if self:IsA("Mouse") and (key == "Hit" or key == "Target") and a.Check() then
-        local p = a.SelectedPart
-        if i.SilentAim and (key == "Hit" or key == "Target") then
-            local q = p.CFrame + p.Velocity * i.Prediction
-            return key == "Hit" and q or p
-        end
-    end
-    return oldIndex(self, key)
+-- Function to hook metamethods
+local function hookmetamethod(obj, method, newfunc)
+    local mt = getrawmetatable(obj)
+    local oldfunc = mt[method]
+    
+    setreadonly(mt, false)
+    mt[method] = newfunc
+    setreadonly(mt, true)
+    
+    return oldfunc
 end
 
--- Notification
+-- Hook the __index metamethod
+local originalIndex
+originalIndex = hookmetamethod(game, "__index", function(instance, property)
+    -- Check if the instance is of type "Mouse" and the property is either "Hit" or "Target"
+    if instance:IsA("Mouse") and (property == "Hit" or property == "Target") and a.Check() then
+        local selectedPart = a.SelectedPart
+        if i.SilentAim then
+            -- Calculate the new CFrame or part to return
+            local predictedCFrame = selectedPart.CFrame + selectedPart.Velocity * i.Prediction
+            if property == "Hit" then
+                return predictedCFrame
+            else
+                return selectedPart
+            end
+        end
+    end
+    -- Fallback to the original behavior if the conditions are not met
+    return originalIndex(instance, property)
+end)
+
+-- Display notification
 notif("Notification", "arts private lock loaded", 5)
