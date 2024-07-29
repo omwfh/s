@@ -142,12 +142,11 @@ local function hookFunction(original, n, o)
 end
 
 -- Hook the __index metamethod
-local gameMeta = getrawmetatable(game)
-local isReadOnly = isreadonly(gameMeta)
-make_writeable(gameMeta)
-hookmetamethod(game, "__index", hookFunction)
-if isReadOnly then
-    make_readonly(gameMeta)
+local mt = getrawmetatable(game)
+if mt then
+    make_writeable(mt[1])
+    hookmetamethod(game, "__index", hookFunction)
+    make_readonly(mt[1])
 end
 
 -- Notification
