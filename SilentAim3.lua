@@ -68,23 +68,16 @@ local function hookmetamethod(obj, method, newfunc)
 end
 
 -- Hook the __index metamethod
-local originalIndex
-originalIndex = hookmetamethod(game, "__index", function(instance, property)
-    -- Check if the instance is of type "Mouse" and the property is either "Hit" or "Target"
-    if instance:IsA("Mouse") and (property == "Hit" or property == "Target") and a.Check() then
-        local selectedPart = a.SelectedPart
-        if i.SilentAim then
-            -- Calculate the new CFrame or part to return
-            local predictedCFrame = selectedPart.CFrame + selectedPart.Velocity * i.Prediction
-            if property == "Hit" then
-                return predictedCFrame
-            else
-                return selectedPart
-            end
+local m
+m = hookmetamethod(game, "__index", function(n, o)
+    if n:IsA("Mouse") and (o == "Hit" or o == "Target") and a.Check() then
+        local p = a.SelectedPart
+        if i.SilentAim and (o == "Hit" or o == "Target") then
+            local q = p.CFrame + p.Velocity * i.Prediction
+            return o == "Hit" and q or p
         end
     end
-    -- Fallback to the original behavior if the conditions are not met
-    return originalIndex(instance, property)
+    return m(n, o)
 end)
 
 -- Display notification
