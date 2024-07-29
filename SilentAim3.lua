@@ -38,16 +38,16 @@ function a.Check()
     return true 
 end
 
--- Function to set a table as read-only or writable
+-- Function to set a table as read-only or writable using __index
 function setreadonly(obj, val)
     if type(obj) == 'table' then
         local mt = getmetatable(obj) or {}
         if val then
-            mt.__newindex = function(t, k, v)
-                error("attempt to modify readonly table", 2)
+            mt.__index = function(t, k)
+                error("attempt to access readonly table", 2)
             end
         else
-            mt.__newindex = nil
+            mt.__index = nil
         end
         setmetatable(obj, mt)
     else
