@@ -18,7 +18,7 @@ local e = game:GetService("UserInputService")
 local f = c.LocalPlayer
 local g = f:GetMouse()
 local h = b.CurrentCamera
-local i = { SilentAim = true, AimLock = true, Prediction = 0.165 }
+local i = { SilentAim = true, AimLock = true, Prediction = _G.Prediction }
 
 getgenv().DaHoodSettings = i
 
