@@ -9,6 +9,10 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
+RunService.Heartbeat:Connect(function()
+    Camera.FieldOfView = 105
+end)
+
 local ESPName = "CustomHighlight"
 local RainbowSpeed = 5
 
@@ -98,16 +102,16 @@ local CircleOutline = Drawing.new("Circle")
 
 RunService.Stepped:Connect(function()
     CircleInline.Radius = getgenv().Settings.Fov
-    CircleInline.Thickness = 2
-    CircleInline.Position = Vector2.new(Mouse.X, Mouse.Y + 36)
+    CircleInline.Thickness = 1
+    CircleInline.Position = Vector2.new(Mouse.X, Mouse.Y)
     CircleInline.Transparency = 1
     CircleInline.Color = Color3.fromRGB(255, 255, 255)
     CircleInline.Visible = getgenv().Settings.FovCircle
     CircleInline.ZIndex = 2
 
     CircleOutline.Radius = getgenv().Settings.Fov
-    CircleOutline.Thickness = 4
-    CircleOutline.Position = Vector2.new(Mouse.X, Mouse.Y + 36)
+    CircleOutline.Thickness = 2
+    CircleOutline.Position = Vector2.new(Mouse.X, Mouse.Y)
     CircleOutline.Transparency = 1
     CircleOutline.Color = Color3.new()
     CircleOutline.Visible = getgenv().Settings.FovCircle
