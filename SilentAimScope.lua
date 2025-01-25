@@ -101,24 +101,38 @@ local CircleInline = Drawing.new("Circle")
 local CircleOutline = Drawing.new("Circle")
 
 RunService.Stepped:Connect(function()
-    CircleInline.Radius = getgenv().Settings.Fov
-    CircleInline.Thickness = 1
-    CircleInline.Position = Vector2.new(Mouse.X, Mouse.Y)
+    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+    local velocity = Vector3.new(0, 0, 0)
+        
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        velocity = LocalPlayer.Character.HumanoidRootPart.Velocity
+    end
+        
+    local speed = velocity.Magnitude
+    local baseFov = getgenv().Settings.Fov
+    local dynamicRadius = baseFov + math.clamp(speed / 5, 0, 50)
+    local dynamicColor = Color3.fromHSV((speed % 100) / 100, 1, 1)
+
+    CircleInline.Radius = dynamicRadius
+    CircleInline.Thickness = 2
+    CircleInline.Position = screenCenter
     CircleInline.Transparency = 1
-    CircleInline.Color = Color3.fromRGB(255, 255, 255)
+    CircleInline.Color = dynamicColor
     CircleInline.Visible = getgenv().Settings.FovCircle
     CircleInline.ZIndex = 2
 
-    CircleOutline.Radius = getgenv().Settings.Fov
-    CircleOutline.Thickness = 2
-    CircleOutline.Position = Vector2.new(Mouse.X, Mouse.Y)
-    CircleOutline.Transparency = 1
-    CircleOutline.Color = Color3.new()
+    CircleOutline.Radius = dynamicRadius + 2
+    CircleOutline.Thickness = 3
+    CircleOutline.Position = screenCenter
+    CircleOutline.Transparency = 0.8
+    CircleOutline.Color = Color3.new(0, 0, 0)
     CircleOutline.Visible = getgenv().Settings.FovCircle
     CircleOutline.ZIndex = 1
 
     Target = GetClosest(getgenv().Settings.Fov)
 end)
+
 
 local Old
 Old = hookmetamethod(game, "__namecall", function(Self, ...)
