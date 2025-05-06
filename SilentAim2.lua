@@ -75,20 +75,41 @@ end
 Aiming.TeamCheck(false)
 
 Aiming.Check = function(): boolean
-    if not (Aiming.Enabled and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart) then
-        return false
-    end
+	if not (Aiming.Enabled and Aiming.Selected and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart) then
+		return false
+	end
 
-    local SelectedCharacter: Model? = Aiming.Character(Aiming.Selected)
-    if not SelectedCharacter then return false end
+	local success, Character = pcall(Aiming.Character, Aiming.Selected)
+	if not success or typeof(Character) ~= "Instance" or not Character:IsA("Model") then
+		return false
+	end
 
-    local BodyEffects: Instance? = SelectedCharacter:FindFirstChild("BodyEffects")
-    if not BodyEffects then return false end
+	local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+	if not Humanoid or Humanoid.Health <= 0 then
+		return false
+	end
 
-    local KnockedOut: BoolValue? = BodyEffects:FindFirstChild("K.O")
-    local IsGrabbed: boolean = SelectedCharacter:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+	local RootPart = Character:FindFirstChild("HumanoidRootPart")
+	if not RootPart or not RootPart:IsA("BasePart") then
+		return false
+	end
 
-    return not (KnockedOut and KnockedOut.Value or IsGrabbed)
+	local BodyEffects = Character:FindFirstChild("BodyEffects")
+	if not BodyEffects or not BodyEffects:IsA("Folder") then
+		return false
+	end
+
+	local KnockedOut = BodyEffects:FindFirstChild("K.O")
+	if KnockedOut and KnockedOut:IsA("BoolValue") and KnockedOut.Value == true then
+		return false
+	end
+
+	local GrabConstraint = Character:FindFirstChild("GRABBING_CONSTRAINT")
+	if GrabConstraint and GrabConstraint:IsA("Instance") then
+		return false
+	end
+
+	return true
 end
 
 local OldIndex
