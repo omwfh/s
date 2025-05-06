@@ -1,4 +1,4 @@
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/sj0wjg0w/main/AimingModule.lua"))()
+local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/omwfh/s/refs/heads/main/Aiming2.lua"))()
 
 local Workspace: Workspace = game:GetService("Workspace")
 local Players: Players = game:GetService("Players")
