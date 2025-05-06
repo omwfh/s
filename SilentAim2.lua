@@ -14,12 +14,10 @@ local Camera: Camera = Workspace.CurrentCamera
 getgenv().DaHoodSettings = {
     SilentAim = true,
     AimLock = true,
-    Prediction = 0.165,
+    Prediction = _G.Prediction,
     Resolver = true,
-    ResolverStrength = 0.18
+    ResolverStrength = 0.2
 }
-
-local name = info:gsub("%b[]", ""):gsub("[^%w%s]", ""):gsub("%s+", "_"):gsub("^_+", ""):gsub("_+$", ""):lower() 
 
 local PingSamples: {number} = {}
 local MaxSamples: number = 10
@@ -29,51 +27,57 @@ local function GetPlayerPing(): number
 end
 
 local function CalculateAccuratePrediction(): number
-    local function CalculateAccuratePrediction(): number
-        local Ping: number = GetPlayerPing()
-        table.insert(PingSamples, Ping)
-        if #PingSamples > MaxSamples then
-            table.remove(PingSamples, 1)
-        end
-    
-        local Sum: number = 0
-        for _, Value: number in ipairs(PingSamples) do
-            Sum += Value
-        end
-    
-        local AveragePing: number = Sum / #PingSamples
-        local BasePing: number = 30
-        local BasePrediction: number = 0.045
-        local PredictionPerMs: number = 0.0013
-    
-        local Prediction: number = BasePrediction + math.max(0, AveragePing - BasePing) * PredictionPerMs
-        return math.clamp(Prediction, 0.045, 0.2)
-    end    
+	local Ping: number = GetPlayerPing()
+	table.insert(PingSamples, Ping)
+	if #PingSamples > MaxSamples then
+		table.remove(PingSamples, 1)
+	end
+
+	local Sum: number = 0
+	for _, Value: number in ipairs(PingSamples) do
+		Sum += Value
+	end
+
+	local AveragePing: number = Sum / #PingSamples
+	local BasePing: number = 30
+	local BasePrediction: number = 0.05
+	local PredictionPerMs: number = 0.0012
+
+	local Prediction: number = BasePrediction + math.max(0, AveragePing - BasePing) * PredictionPerMs
+	return math.clamp(Prediction, 0.045, 0.2)
 end
 
 local function ResolveTarget(TargetPart: BasePart): CFrame
-    if not getgenv().DaHoodSettings.Resolver then
-        return TargetPart.CFrame
-    end
-    return TargetPart.CFrame + TargetPart.Velocity * getgenv().DaHoodSettings.ResolverStrength
+	if not getgenv().DaHoodSettings.Resolver then
+		return TargetPart and TargetPart.CFrame or CFrame.new()
+	end
+
+	if not TargetPart or typeof(TargetPart) ~= "Instance" or not TargetPart:IsA("BasePart") then
+		return CFrame.new()
+	end
+
+	local position = TargetPart.Position
+	local velocity = TargetPart.Velocity or Vector3.zero
+	local cameraPos = Camera and Camera.CFrame.Position or Vector3.zero
+
+	local distance = (cameraPos - position).Magnitude
+	local baseStrength = getgenv().DaHoodSettings.ResolverStrength or 0.2
+	local scaledStrength = math.clamp(baseStrength + (distance / 900), 0, 1.5)
+
+	local predictedPosition = position + (velocity * scaledStrength)
+
+	if typeof(predictedPosition) ~= "Vector3" or predictedPosition.Magnitude > 1e5 then
+		return TargetPart.CFrame
+	end
+
+	return CFrame.new(predictedPosition)
 end
 
 RunService.Heartbeat:Connect(function()
     getgenv().DaHoodSettings.Prediction = CalculateAccuratePrediction()
 end)
 
-local function Notify(Title: string, Text: string, Duration: number)
-    task.spawn(function()
-        StarterGui:SetCore("SendNotification", {
-            Title = Title,
-            Text = Text,
-            Duration = Duration
-        })
-    end)
-end
-
 Aiming.TeamCheck(false)
-
 Aiming.Check = function(): boolean
 	if not (Aiming.Enabled and Aiming.Selected and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart) then
 		return false
@@ -114,11 +118,15 @@ end
 
 local OldIndex
 OldIndex = hookmetamethod(game, "__index", function(Object: Instance, Property: string)
-    if Object:IsA("Mouse") and (Property == "Hit" or Property == "Target") and Aiming.Check() then
-        local TargetPart: BasePart = Aiming.SelectedPart
-        if getgenv().DaHoodSettings.SilentAim and (Property == "Hit" or Property == "Target") then
-            local PredictedPosition: CFrame = ResolveTarget(TargetPart) + TargetPart.Velocity * getgenv().DaHoodSettings.Prediction
-            return Property == "Hit" and PredictedPosition or TargetPart
+    if typeof(Object) == "Instance" and Object:IsA("Mouse") and (Property == "Hit" or Property == "Target") and Aiming.Check() then
+        if getgenv().DaHoodSettings.SilentAim then
+            local TargetPart: BasePart = Aiming.SelectedPart
+            if TargetPart and typeof(TargetPart) == "Instance" and TargetPart:IsA("BasePart") then
+                local prediction: number = getgenv().DaHoodSettings.Prediction or 0.1
+                local predictedPosition: Vector3 = TargetPart.Position + (TargetPart.Velocity or Vector3.zero) * prediction
+                local predictedCFrame: CFrame = CFrame.new(predictedPosition)
+                return Property == "Hit" and predictedCFrame or TargetPart
+            end
         end
     end
     return OldIndex(Object, Property)
